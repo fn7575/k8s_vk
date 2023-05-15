@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: curljob
+spec:
+  jobTemplate:
+    metadata:
+      name: curljob
+    spec:
+      template:
+        metadata:
+        spec:
+          containers:
+          - command:
+            - curl
+            - http://stateful-0.nginxstateful.default.svc.cluster.local
+            image: curlimages/curl
+            imagePullPolicy: Always
+            name: curljobt
+          restartPolicy: OnFailure
+  schedule: '*/1 * * * *'

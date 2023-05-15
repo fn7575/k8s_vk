@@ -1,0 +1,104 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-stateful-conf
+data:
+  nginxstateful.conf: |
+    user nginx;
+    worker_processes  1;
+    events {
+      worker_connections  1024;
+    }
+    http {
+      server {
+          listen       80;
+          server_name  catdogs1;
+          location /cats {
+            return 200 'Cat is nice';
+        }
+          location /dogs {
+            return 200 'Dog is nice';
+        }
+      }
+    }
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginxstateful
+  labels:
+    app: nginxstateful
+spec:
+  ports:
+  - port: 80
+    name: stateful
+  clusterIP: None
+  selector:
+    app: nginxstateful
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: stateful
+spec:
+  selector:
+    matchLabels:
+      app: nginxstateful
+  serviceName: "nginxstateful"
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: nginxstateful
+    spec:
+      containers:
+      - name: nginxstateful
+        image: nginx
+        ports:
+        - containerPort: 80
+        volumeMounts:
+            - name: nginx-stateful-conf
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginxstateful.conf
+              readOnly: true
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        readinessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 20    
+      volumes:
+      - name: pvc
+        persistentVolumeClaim:
+          claimName: myclaim
+      - name: nginx-stateful-conf
+        configMap:
+          name: nginx-stateful-conf
+          items:
+            - key: nginxstateful.conf
+              path: nginxstateful.conf
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: myclaim
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
