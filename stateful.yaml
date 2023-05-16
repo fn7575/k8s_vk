@@ -14,10 +14,16 @@ data:
           listen       80;
           server_name  catdogs1;
           location /cats {
-            return 200 'Cat is nice';
+            alias /usr/share/nginx/html/cats;
+            autoindex on;
+            dav_methods PUT;
+            create_full_put_path on;
         }
           location /dogs {
-            return 200 'Dog is nice';
+            alias /usr/share/nginx/html/dogs;
+            autoindex on;
+            dav_methods PUT;
+            create_full_put_path on;
         }
       }
     }
@@ -62,7 +68,8 @@ spec:
             - name: nginx-stateful-conf
               mountPath: /etc/nginx/nginx.conf
               subPath: nginxstateful.conf
-              readOnly: true
+            - name: share-nginx
+              mountPath: /usr/share/nginx/html
         resources:
           requests:
             memory: "64Mi"
@@ -90,6 +97,7 @@ spec:
           items:
             - key: nginxstateful.conf
               path: nginxstateful.conf
+      - name: share-nginx
 
 ---
 apiVersion: v1
