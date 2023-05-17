@@ -13,14 +13,8 @@ data:
       server {
           listen       80;
           server_name  catdogs1;
-          location /cats {
-            alias /usr/share/nginx/html/cats;
-            autoindex on;
-            dav_methods PUT;
-            create_full_put_path on;
-        }
-          location /dogs {
-            alias /usr/share/nginx/html/dogs;
+          location / {
+            alias /usr/share/nginx/html/;
             autoindex on;
             dav_methods PUT;
             create_full_put_path on;

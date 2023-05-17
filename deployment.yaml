@@ -17,10 +17,10 @@ data:
             return 200 'Cats and Dogs Review App!';
         }
         location /cats {
-            proxy_pass http://stateful-0.nginxstateful.default.svc.cluster.local/cats;
+            proxy_pass http://stateful-0.nginxstateful.default.svc.cluster.local;
         }
         location /dogs {
-            proxy_pass http://stateful-1.nginxstateful.default.svc.cluster.local/dogs;
+            proxy_pass http://stateful-1.nginxstateful.default.svc.cluster.local;
         }
       }
     }
