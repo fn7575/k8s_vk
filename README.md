@@ -1,5 +1,3 @@
-## Scheme
-![Scheme](https://github.com/fn7575/k8s_vk/blob/main/scheme.png)
 ## Requirements
 * docker
 * minikube
@@ -29,3 +27,5 @@ fn7575@fn7575:~/k8s_vk$ minikube ip
 fn7575@fn7575:~/k8s_vk$ curl 192.168.49.2/cats/cats.txt
 i love cats
 ```
+## Scheme
+![Scheme](https://github.com/fn7575/k8s_vk/blob/main/scheme.png)
