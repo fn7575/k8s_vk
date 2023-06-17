@@ -1,5 +1,5 @@
 ## Scheme
-![Scheme]((https://github.com/fn7575/k8s_vk/blob/main/scheme.png)
+![Scheme](https://github.com/fn7575/k8s_vk/blob/main/scheme.png)
 ## Requirements
 * docker
 * minikube
